@@ -1,35 +1,25 @@
-import { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Link,
-} from "react-router-dom";
+import { useState } from "react";
+import { Route, Redirect, useHistory } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import QuotesPage from "./pages/QuotesPage";
+import Navbar from "./components/Navbar";
 
 function App() {
-  const loggedIn = window.localStorage.getItem("adminLoggedIn") === "true";
+  const [loggedIn, setLoggedIn] = useState(
+    window.localStorage.getItem("adminLoggedIn") === "true"
+  );
 
-  useEffect(() => {}, [loggedIn]);
+  let history = useHistory();
 
   return (
-    <Router>
-      <nav>
-        <h1>Likeable-app 👍🏼</h1>
-        {loggedIn ? (
-          "logout"
-        ) : (
-          <>
-            <Link to="/auth">Log In</Link>
-            <Link to="/auth">Sign Up</Link>
-          </>
-        )}
-      </nav>
+    <>
+      <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} history={history} />
       {!loggedIn && <Redirect to="/auth" />}
-      <Route exact path="/auth" component={AuthPage} />
+      <Route exact path="/auth">
+        <AuthPage setLoggedIn={setLoggedIn} />
+      </Route>
       <Route exact path="/quotes" component={QuotesPage} />
-    </Router>
+    </>
   );
 }
 

@@ -1,20 +1,24 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const validUser = { username: "admin", password: "123" };
 
-export default function AuthPage({ history }) {
+export default function AuthPage({ setLoggedIn }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+
+  let history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (username === validUser.username && password === validUser.password) {
       window.localStorage.setItem("adminLoggedIn", true);
+      setLoggedIn(true);
       setErrorMsg("");
       history.push("/quotes");
     } else {
-      setErrorMsg("Try again bro!");
+      setErrorMsg("Something went wrong, please check your password!");
     }
   };
 
